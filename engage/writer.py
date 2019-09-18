@@ -78,7 +78,7 @@ class Sphinx(Writer):
 
 def update_module(contents: str, writer: Type[Writer] = Sphinx) -> str:
     func_data = map(func_summary, fetch_functions(contents))
-    summary = {}
+    summary = []
     for function in func_data:
         author = writer()
         for name, value in function.items():
@@ -88,15 +88,13 @@ def update_module(contents: str, writer: Type[Writer] = Sphinx) -> str:
                 else:
                     for item in value:
                         getattr(author, "update_" + name)(item)
-        summary[function['name']] = author.digest(function['indent'])
+        summary.append(author.digest(function['indent']))
 
-    parsed = ast.parse(contents)
-    for part in ast.walk(parsed):
-        if isinstance(part, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            if part.name in summary:
-                if isinstance(part.body[0], ast.Expr) and isinstance(part.body[0].value, ast.Str):
-                    part.body[0].value.s = summary[part.name]
-                else:
-                    e = ast.Expr([ast.Str(summary[part.name])])
-                    part.body.insert(0, e)
-    return to_source(parsed)
+    func_generator = fetch_functions(contents, True)
+    for doc, part in zip(summary, func_generator):
+        if isinstance(part.body[0], ast.Expr) and isinstance(part.body[0].value, ast.Str):
+            part.body[0].value.s = doc
+        else:
+            e = ast.Expr([ast.Str(doc)])
+            part.body.insert(0, e)
+    return to_source(next(func_generator))

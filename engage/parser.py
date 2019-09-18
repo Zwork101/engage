@@ -5,11 +5,13 @@ import warnings
 import astor
 
 
-def fetch_functions(content: str) -> Iterator[Union[ast.FunctionDef, ast.AsyncFunctionDef]]:
+def fetch_functions(content: str, return_body: bool = False) -> Iterator[Union[ast.FunctionDef, ast.AsyncFunctionDef]]:
     body = ast.parse(content)
     for part in ast.walk(body):
         if isinstance(part, (ast.FunctionDef, ast.AsyncFunctionDef)):
             yield part
+    if return_body:
+        yield body
 
 
 def has_return(func: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> bool:

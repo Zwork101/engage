@@ -14,7 +14,7 @@ class Bar:
 
     def fizz(self, buzz: bytes, *python: list, js: str='ew'):
         """
-        Docstring!
+        Docstring
         
         :param *python: 
         :type *python: list
@@ -23,3 +23,10 @@ class Bar:
         :param buzz: 
         :type buzz: bytes
         """
+        pass
+
+    def foo(self):
+        """
+        
+        """
+        pass

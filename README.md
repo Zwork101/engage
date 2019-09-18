@@ -75,7 +75,7 @@ Yes and no. PyCharm will add the params, but won't add the type domains, nor aut
 
 * Functionality will stay the same, there is a possibility the source code will *slightly* change. [See the astor issues if this happens](https://github.com/berkerpeksag/astor)
 
-* Functions in the same module with the same name will have the same docs. Please give your functions different names!
+* ~~Functions in the same module with the same name will have the same docs. Please give your functions different names!~~
 
 ## How do I use this with something like pdoc?
 
